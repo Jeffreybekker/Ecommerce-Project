@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     
     # Custom Apps
     'core',
+    'userauths',
 ]
 
 MIDDLEWARE = [
@@ -143,3 +144,5 @@ JAZZMIN_SETTINGS = {
     'site_logo': 'assets/imgs/theme/loading.gif',
     'copyright': 'jeffreys-shop.com',
 }
+
+AUTH_USER_MODEL = 'userauths.User'
