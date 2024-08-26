@@ -74,13 +74,15 @@ class Vendor(models.Model):
 class Product(models.Model):
     pid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefgh12345")
     
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True)
+
+    
     title = models.CharField(max_length=100, default="Fresh Pear")
     image = models.ImageField(upload_to=user_directory_path, default="product.jpg")
     description = models.TextField(null=True, blank=True, default="This is the product")
-    
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
-    
+        
     price = models.DecimalField(max_digits=99999999, decimal_places=2, default="1.99")
     old_price = models.DecimalField(max_digits=99999999, decimal_places=2, default="2.99")
     
@@ -91,7 +93,7 @@ class Product(models.Model):
     
     status = models.BooleanField(default=True)
     in_stock = models.BooleanField(default=True)
-    featured = models.BooleanField(default=False)
+    featured = models.BooleanField(default=True)
     digital = models.BooleanField(default=False)   
     
     sku = ShortUUIDField(unique=True, length=4, max_length=10, prefix="sku", alphabet="1234567890")
@@ -109,7 +111,7 @@ class Product(models.Model):
         return self.title
     
     def get_percentage(self):
-        new_price = (self.price / self.old_price) * 100
+        new_price = 100 - (self.price / self.old_price) * 100
         return new_price
 
 class ProductImages(models.Model):
