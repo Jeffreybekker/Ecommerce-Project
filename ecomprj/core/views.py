@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from taggit.models import Tag
+from django.db.models import Avg
 from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, ProductImages, ProductReview, Wishlist, Address
-
+from core.forms import ProductReviewForm
 
 # Create your views here.
 def index(request):
@@ -69,11 +70,23 @@ def product_detail_view(request, pid):
     # product = get_object_or_404(Product, pid=pid)
     products = Product.objects.filter(category=product.category).exclude(pid=pid)
     
+    # Getting all reviews related to a product
+    reviews = ProductReview.objects.filter(product=product).order_by("-date")
+    
+    # Getting average review
+    average_rating = ProductReview.objects.filter(product=product).aggregate(rating=Avg('rating'))
+    
+    # Product Review Form
+    review_form = ProductReviewForm()
+    
     p_image = product.p_images.all()
     
     context = {
         "p": product,
+        "review_form": review_form,
         "p_image": p_image,
+        "average_rating": average_rating,
+        "reviews": reviews,
         "products": products,
     }
     
@@ -93,3 +106,30 @@ def tag_list(request, tag_slug=None):
     }
     
     return render(request, "core/tag.html", context)
+
+def ajax_add_review(request, pid):
+    product = Product.objects.get(pk=pid)
+    user = request.user
+    
+    review = ProductReview.objects.create(
+        user =user,
+        product=product,
+        review = request.POST['review'],
+        rating = request.POST['rating'],
+    )
+    
+    context = {
+        'user': user.username,
+        'review': request.POST['review'],
+        'rating': request.POST['rating'],
+    }
+    
+    average_reviews = ProductReview.objects.filter(product=product).aggregate(rating=Avg("rating"))
+    
+    return JsonResponse(
+        {
+        'bool': True,
+        'context': context,
+        'average_reviews': average_reviews,
+        }
+    )
