@@ -2,6 +2,12 @@
 {% load static %}
 {% block content %}
 
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/styles/default.min.css">
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.3/highlight.min.js"></script>
+<script src="{% static 'assets/js/prism.js' %}"></script>
+<link rel="stylesheet" href="{% static 'assets/css/prism.css' %}">
+
     <main class="main">
         <div class="page-header breadcrumb-wrap">
             <div class="container">
@@ -64,7 +70,7 @@
                                                 </div>
                                             </div>
                                             <div class="short-desc mb-30">
-                                                <p class="font-lg">{{ p.description|truncatechars:100 }}</p>
+                                                <p class="font-lg">{{ p.description|truncatechars:100|safe }}</p>
                                             </div>
                                             <!-- <div class="attr-detail attr-size mb-30">
                                                 <strong class="mr-10">Size / Weight: </strong>
@@ -124,7 +130,7 @@
                                             <div class="tab-pane fade show active" id="Description">
                                                 <div class="">
                                                     <p>
-                                                        {{ p.description }}
+                                                        {{ p.description|safe }}
                                                     </p>
                                                 </div>
                                             </div>
@@ -251,7 +257,7 @@
                                                         <h4 class="mb-0">{{ p.vendor.chat_resp_time }}</h4>
                                                     </div>
                                                 </div>
-                                                <p>{{ p.vendor.description }}</p>
+                                                <p>{{ p.vendor.description|safe }}</p>
                                             </div>
                                             <div class="tab-pane fade" id="Reviews">
                                                 <!--Comments-->
