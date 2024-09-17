@@ -145,7 +145,7 @@ $("#add-to-cart-btn").on("click", function(){
         url: '/add-to-cart',
         data: {
             'id': product_id,
-            'qt': quantity,
+            'qty': quantity,
             'title': product_title,
             'price': product_price,
         },
@@ -153,9 +153,10 @@ $("#add-to-cart-btn").on("click", function(){
         beforeSend: function(){
             console.log("Adding Product to Cart...");
         },
-        success: function(res){
+        success: function(response){
             this_val.html("Item added to cart")
             console.log("Added Product to Cart!");
+            $(".cart-items-count").text(response.totalcartitems)
         }
     })
 })
