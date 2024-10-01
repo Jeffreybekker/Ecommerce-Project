@@ -125,26 +125,39 @@ $(document).ready(function (){
     })
 })
 
-
+// For classes use: .
+// For id's use: #
 
 // Add to cart functionality
-$("#add-to-cart-btn").on("click", function(){
-    let quantity = $("#product-quantity").val() // For id's use #
-    let product_title = $(".product-title").val() // For classes use .
-    let product_id = $(".product-id").val()
-    let product_price = $("#current-product-price").text()
-    let this_val = $(this)
+$(".add-to-cart-btn").on("click", function(){
+
+    let this_val = $(this) // 'this' means the element that you pass in (add-to-cart-btn)(one line above)
+    let index = this_val.attr("data-index")
+
+    let quantity = $(".product-quantity-" + index).val() 
+    let product_title = $(".product-title-" + index).val() 
+
+    let product_id = $(".product-id-" + index).val()
+    let product_price = $(".current-product-price-" + index).text()
+
+    let product_pid = $(".product-pid-" + index).val()
+    let product_image = $(".product-image-" + index).val()
 
     console.log("Quantity:", quantity);
     console.log("Title:", product_title);
     console.log("ID:", product_id);
+    console.log("PID:", product_pid);
+    console.log("Image:", product_image);
     console.log("Price:", product_price);
+    console.log("Index:", index);
     console.log("Current Element:", this_val);
 
     $.ajax({
         url: '/add-to-cart',
         data: {
             'id': product_id,
+            'pid': product_pid,
+            'image': product_image,
             'qty': quantity,
             'title': product_title,
             'price': product_price,
@@ -154,9 +167,44 @@ $("#add-to-cart-btn").on("click", function(){
             console.log("Adding Product to Cart...");
         },
         success: function(response){
-            this_val.html("Item added to cart")
+            this_val.html("✓")
             console.log("Added Product to Cart!");
             $(".cart-items-count").text(response.totalcartitems)
         }
     })
 })
+
+
+// Add to cart functionality
+// $(".add-to-cart-btn").on("click", function(){
+//     let quantity = $("#product-quantity").val() // For id's use: #
+//     let product_title = $(".product-title").val() // For classes use: .
+//     let product_id = $(".product-id").val()
+//     let product_price = $("#current-product-price").text()
+//     let this_val = $(this)
+
+//     console.log("Quantity:", quantity);
+//     console.log("Title:", product_title);
+//     console.log("ID:", product_id);
+//     console.log("Price:", product_price);
+//     console.log("Current Element:", this_val);
+
+//     $.ajax({
+//         url: '/add-to-cart',
+//         data: {
+//             'id': product_id,
+//             'qty': quantity,
+//             'title': product_title,
+//             'price': product_price,
+//         },
+//         dataType: 'json',
+//         beforeSend: function(){
+//             console.log("Adding Product to Cart...");
+//         },
+//         success: function(response){
+//             this_val.html("Item added to cart")
+//             console.log("Added Product to Cart!");
+//             $(".cart-items-count").text(response.totalcartitems)
+//         }
+//     })
+// })
