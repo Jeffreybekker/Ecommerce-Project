@@ -123,54 +123,58 @@ $(document).ready(function (){
         }
 
     })
-})
 
-// For classes use: .
-// For id's use: #
 
-// Add to cart functionality
-$(".add-to-cart-btn").on("click", function(){
+    // For classes use: .
+    // For id's use: #
 
-    let this_val = $(this) // 'this' means the element that you pass in (add-to-cart-btn)(one line above)
-    let index = this_val.attr("data-index")
+    // Add to cart functionality
+    $(".add-to-cart-btn").on("click", function () {
 
-    let quantity = $(".product-quantity-" + index).val() 
-    let product_title = $(".product-title-" + index).val() 
+        let this_val = $(this)
+        let index = this_val.attr("data-index")
 
-    let product_id = $(".product-id-" + index).val()
-    let product_price = $(".current-product-price-" + index).text()
+        let quantity = $(".product-quantity-" + index).val()
+        let product_title = $(".product-title-" + index).val()
 
-    let product_pid = $(".product-pid-" + index).val()
-    let product_image = $(".product-image-" + index).val()
+        let product_id = $(".product-id-" + index).val()
+        let product_price = $(".current-product-price-" + index).text()
 
-    console.log("Quantity:", quantity);
-    console.log("Title:", product_title);
-    console.log("ID:", product_id);
-    console.log("PID:", product_pid);
-    console.log("Image:", product_image);
-    console.log("Price:", product_price);
-    console.log("Index:", index);
-    console.log("Current Element:", this_val);
+        let product_pid = $(".product-pid-" + index).val()
+        let product_image = $(".product-image-" + index).val()
 
-    $.ajax({
-        url: '/add-to-cart',
-        data: {
-            'id': product_id,
-            'pid': product_pid,
-            'image': product_image,
-            'qty': quantity,
-            'title': product_title,
-            'price': product_price,
-        },
-        dataType: 'json',
-        beforeSend: function(){
-            console.log("Adding Product to Cart...");
-        },
-        success: function(response){
-            this_val.html("✓")
-            console.log("Added Product to Cart!");
-            $(".cart-items-count").text(response.totalcartitems)
-        }
+
+        console.log("Quantity:", quantity);
+        console.log("Title:", product_title);
+        console.log("Price:", product_price);
+        console.log("ID:", product_id);
+        console.log("PID:", product_pid);
+        console.log("Image:", product_image);
+        console.log("Index:", index);
+        console.log("Currrent Element:", this_val);
+
+        $.ajax({
+            url: '/add-to-cart',
+            data: {
+                'id': product_id,
+                'pid': product_pid,
+                'image': product_image,
+                'qty': quantity,
+                'title': product_title,
+                'price': product_price,
+            },
+            dataType: 'json',
+            beforeSend: function () {
+                console.log("Adding Product to Cart...");
+            },
+            success: function (response) {
+                // this_val.html("✓")
+                this_val.html("<i class='fas fa-check-circle'></i>")
+
+                console.log("Added Product to Cart!");
+                $(".cart-items-count").text(response.totalcartitems)
+            }
+        })
     })
 })
 
