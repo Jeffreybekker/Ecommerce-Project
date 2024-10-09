@@ -124,7 +124,6 @@ $(document).ready(function (){
 
     })
 
-
     // For classes use: .
     // For id's use: #
 
@@ -174,6 +173,31 @@ $(document).ready(function (){
                 console.log("Added Product to Cart!");
                 $(".cart-items-count").text(response.totalcartitems)
             }
+        })
+    })
+
+
+    $(document).on("click", '.delete-product', function(){
+
+        let product_id = $(this).attr("data-product")
+        let this_val = $(this)
+
+        console.log("Product ID:", product_id);
+
+        $.ajax({
+            url: "/delete-from-cart",
+            data: {
+                "id": product_id,
+            },
+            dataType: "json",
+            beforeSend: function(){
+                this_val.hide()
+            },
+            success: function(response){
+                this_val.show()
+                $(".cart-items-count").text(response.totalcartitems)
+                $("#cart-list").html(response.data)
+            },
         })
     })
 })
