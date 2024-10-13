@@ -1,5 +1,5 @@
 from django.urls import path
-from core.views import index, update_cart, delete_item_from_cart, cart_view, product_list_view, category_list_view, category_product_list_view, vendor_list_view, vendor_detail_view, product_detail_view, tag_list, ajax_add_review, search_view, filter_product, add_to_cart
+from core.views import index, checkout_view, update_cart, delete_item_from_cart, cart_view, product_list_view, category_list_view, category_product_list_view, vendor_list_view, vendor_detail_view, product_detail_view, tag_list, ajax_add_review, search_view, filter_product, add_to_cart
 
 app_name = "core"
 
@@ -41,5 +41,6 @@ urlpatterns = [
     # Update cart
     path("update-cart/", update_cart, name="update-cart"), # This urlpath must be the same as in the function.js
 
-
+    # Checkout URL
+    path("checkout/", checkout_view, name="checkout"),
 ]
