@@ -261,13 +261,44 @@ def update_cart(request):
 
 @login_required
 def checkout_view(request):
+    
+    cart_total_amount = 0
+    total_amount = 0
+    
+    # Checking if cart_data_obj session exists
+    if 'cart_data_obj' in request.session:
+        
+        # Getting total amount for PayPal amount
+        for p_id, item in request.session['cart_data_obj'].items():
+            total_amount += int(item['qty']) * float(item['price'])
+    
+        # Create Order Objects        
+        order = CartOrder.objects.create(   
+            user=request.user,
+            price=total_amount,
+        )
+
+        # Getting total amount for The Cart
+        for p_id, item in request.session['cart_data_obj'].items():
+            cart_total_amount += int(item['qty']) * float(item['price'])
+            
+            cart_order_items = CartOrderItems.objects.create(
+                order=order,
+                invoice_no="INVOICE_NO-" + str(order.id), # Return INVOICE_NO-5 for example
+                item=item['title'],
+                image=item['image'],
+                quantity=item['qty'],
+                price=item['price'],
+                total=float(item['qty']) * float(item['price']),
+            )
+    
     host = request.get_host()
     paypal_dict = {
         'business': settings.PAYPAL_RECEIVER_EMAIL,
-        'amount': '8',
-        'item_name': 'Order-Item-No-4',
-        'invoice': 'INV_NO-4',
-        'currency': 'USD',
+        'amount': cart_total_amount,
+        'item_name': 'Order-Item-No-' + str(order.id),
+        'invoice': 'INV_NO-' + str(order.id),
+        'currency_code': 'USD',
         'notify_url': 'http://{}{}'.format(host, reverse('core:paypal-ipn')),
         'return_url': 'http://{}{}'.format(host, reverse('core:payment-completed')),
         'cancel_url': 'http://{}{}'.format(host, reverse('core:payment-failed')),    
