@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'taggit', 
     'django_ckeditor_5',
     
+    # PayPal Integration
+    'paypal.standard.ipn',
+    
     # Custom Apps
     'core',
     'userauths',
@@ -150,6 +153,8 @@ JAZZMIN_SETTINGS = {
     'copyright': 'jeffreys-shop.com',
 }
 
+LOGIN_URL = "userauths:sign-in" # You use this to login.
+
 AUTH_USER_MODEL = 'userauths.User'
 
 customColorPalette = [
@@ -241,3 +246,6 @@ CKEDITOR_5_CONFIGS = {
         }
     }
 }
+
+PAYPAL_RECEIVER_EMAIL = 'sb-c5xgx6555500@business.example.com'
+PAYPAL_TEST = True
