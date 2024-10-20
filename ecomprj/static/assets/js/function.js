@@ -227,39 +227,31 @@ $(document).ready(function (){
             },
         })
     })
+
+    // Making Default Address 
+    $(document).on("click", ".make-default-address", function(){
+        let id = $(this).attr("data-address-id")
+        let this_val = $(this)
+
+        console.log("ID is:", id);
+        console.log("Element is:", this_val);
+
+        $.ajax({
+            url: "/make-default-address",
+            data: {
+                "id": id,                 
+            },
+            dataType: "json",
+            success: function(response){
+                console.log("Address Made Default...");
+                if (response.boolean == true){
+                    $(".check").hide()  //the .check class in dashboard.html you'll hide
+                    $(".action_btn").show()
+                    
+                    $(".check" + id).show()
+                    $(".button" + id).hide()
+                }
+            }
+        })
+    })
 })
-
-
-// Add to cart functionality
-// $(".add-to-cart-btn").on("click", function(){
-//     let quantity = $("#product-quantity").val() // For id's use: #
-//     let product_title = $(".product-title").val() // For classes use: .
-//     let product_id = $(".product-id").val()
-//     let product_price = $("#current-product-price").text()
-//     let this_val = $(this)
-
-//     console.log("Quantity:", quantity);
-//     console.log("Title:", product_title);
-//     console.log("ID:", product_id);
-//     console.log("Price:", product_price);
-//     console.log("Current Element:", this_val);
-
-//     $.ajax({
-//         url: '/add-to-cart',
-//         data: {
-//             'id': product_id,
-//             'qty': quantity,
-//             'title': product_title,
-//             'price': product_price,
-//         },
-//         dataType: 'json',
-//         beforeSend: function(){
-//             console.log("Adding Product to Cart...");
-//         },
-//         success: function(response){
-//             this_val.html("Item added to cart")
-//             console.log("Added Product to Cart!");
-//             $(".cart-items-count").text(response.totalcartitems)
-//         }
-//     })
-// })

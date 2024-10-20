@@ -1,3 +1,4 @@
+from ast import Add
 from math import log
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, JsonResponse
@@ -310,8 +311,14 @@ def checkout_view(request):
     if 'cart_data_obj' in request.session:
         for p_id, item in request.session['cart_data_obj'].items():
             cart_total_amount += int(item['qty']) * float(item['price'])
+    
+    try:  
+        active_address = Address.objects.get(user=request.user, status=True)
+    except:
+        messages.warning(request, "There are multiple addresses, only one should be activated.")
+        active_address = None # Like this the program won't break. But only the admin can mess with this.
             
-    return render(request, "core/checkout.html", {"cart_data":request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj']), 'cart_total_amount':cart_total_amount, 'paypal_payment_button': paypal_payment_button})
+    return render(request, "core/checkout.html", {"cart_data":request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj']), 'cart_total_amount':cart_total_amount, 'paypal_payment_button': paypal_payment_button, "active_address": active_address})
 
 
 @login_required
@@ -362,3 +369,10 @@ def order_detail(request, id):
         "order_items": order_items,
     }
     return render(request, 'core/order-detail.html', context)
+
+
+def make_address_default(request):
+    id = request.GET['id']
+    Address.objects.update(status=False)
+    Address.objects.filter(id=id).update(status=True)
+    return JsonResponse({"boolean": True})
