@@ -60,4 +60,10 @@ urlpatterns = [
     
     # Making Address Default
     path("make-default-address/", make_address_default, name="make-default-address"),
+    
+    # Wishlist Page
+    path("wishlist/", wishlist_view, name="wishlist"),
+    
+    # Added to Wishlist
+    path("add-to-wishlist", add_to_wishlist, name="add-to-wistlist"),
 ]

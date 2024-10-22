@@ -336,6 +336,7 @@ def payment_completed_view(request):
 def payment_failed(request):
     return render(request, 'core/payment-failed.html')
 
+
 @login_required
 def customer_dashboard(request):
     orders = CartOrder.objects.filter(user=request.user).order_by("-id")
@@ -360,6 +361,7 @@ def customer_dashboard(request):
     
     return render(request, 'core/dashboard.html', context)
 
+
 @login_required
 def order_detail(request, id):
     order = CartOrder.objects.get(user=request.user, id=id)
@@ -376,3 +378,37 @@ def make_address_default(request):
     Address.objects.update(status=False)
     Address.objects.filter(id=id).update(status=True)
     return JsonResponse({"boolean": True})
+
+
+@login_required
+def wishlist_view(request):
+    wishlist = Wishlist.objects.all()
+    context = {
+        "w": wishlist,
+    }
+    return render(request, "core/wishlist.html", context)
+
+
+def add_to_wishlist(request):
+    product_id = request.GET['id']
+    product = Product.objects.get(id=product_id)
+    
+    context = {}
+    
+    wishlist_count = Wishlist.objects.filter(product=product, user=request.user).count()
+    print(wishlist_count)
+    
+    if wishlist_count > 0:
+        context = {
+            "bool": True,
+        }
+    else:
+        new_wishlist = Wishlist.objects.create(
+            product=product,
+            user=request.user,
+        )
+    
+        context = {
+            "bool": True,
+        }
+    return JsonResponse(context)
