@@ -65,5 +65,9 @@ urlpatterns = [
     path("wishlist/", wishlist_view, name="wishlist"),
     
     # Added to Wishlist
-    path("add-to-wishlist", add_to_wishlist, name="add-to-wistlist"),
+    path("add-to-wishlist/", add_to_wishlist, name="add-to-wistlist"),
+    
+    # Removing from Wishlist
+    path("remove-from-wishlist/", remove_wishlist, name="remove-from-wistlist"),
+    
 ]

@@ -1,4 +1,5 @@
 from ast import Add
+from django.core import serializers
 from math import log
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, JsonResponse
@@ -412,3 +413,19 @@ def add_to_wishlist(request):
             "bool": True,
         }
     return JsonResponse(context)
+
+
+def remove_wishlist(request):
+    pid = request.GET['id']
+    wishlist = Wishlist.objects.filter(user=request.user)
+    
+    product = Wishlist.objects.get(id=pid)
+    product.delete()
+    
+    context = {
+        "bool": True,
+        "wishlist": wishlist,
+    }
+    wishlist_json = serializers.serialize('json', wishlist)
+    data = render_to_string("core/async/wishlist-list.html", context)
+    return JsonResponse({"data": data, "w": wishlist_json})
