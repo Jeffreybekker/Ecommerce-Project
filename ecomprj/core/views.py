@@ -1,10 +1,11 @@
 from ast import Add
+from calendar import month
 from django.core import serializers
 from math import log
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, JsonResponse
 from taggit.models import Tag
-from django.db.models import Avg
+from django.db.models import Avg, Count
 from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, ProductImages, ProductReview, Wishlist, Address
 from core.forms import ProductReviewForm
 from django.template.loader import render_to_string
@@ -15,6 +16,9 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from paypal.standard.forms import PayPalPaymentsForm
+
+import calendar
+from django.db.models.functions import ExtractMonth
 
 # Create your views here.
 def index(request):
@@ -340,8 +344,16 @@ def payment_failed(request):
 
 @login_required
 def customer_dashboard(request):
-    orders = CartOrder.objects.filter(user=request.user).order_by("-id")
+    orders_list = CartOrder.objects.filter(user=request.user).order_by("-id")
     address = Address.objects.filter(user=request.user)
+    
+    orders = CartOrder.objects.annotate(month=ExtractMonth("order_date")).values("month").annotate(count=Count("id")).values("month", "count")
+    month = []
+    total_orders = []
+    
+    for o in orders:
+        month.append(calendar.month_name[o['month']])
+        total_orders.append(o['count'])
     
     if request.method == 'POST':
         address = request.POST.get('address')
@@ -356,7 +368,10 @@ def customer_dashboard(request):
         return redirect("core:dashboard")
     
     context = {
-        "orders": orders,
+        "orders_list": orders_list,
+        "orders":orders,
+        "month": month,
+        "total_orders": total_orders,
         "address": address,
     }
     
