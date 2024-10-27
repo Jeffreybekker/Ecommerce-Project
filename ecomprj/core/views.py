@@ -1,5 +1,4 @@
 from calendar import month
-from multiprocessing import context
 from profile import Profile
 from django.core import serializers
 from django.shortcuts import render, get_object_or_404, redirect
@@ -266,65 +265,82 @@ def update_cart(request):
     return JsonResponse({"data": context, "totalcartitems": len(request.session['cart_data_obj'])})
 
 
-@login_required
-def checkout_view(request):
-    
+def save_checkout_info(request):
     cart_total_amount = 0
     total_amount = 0
     
-    # Checking if cart_data_obj session exists
-    if 'cart_data_obj' in request.session:
+    if request.method == "POST":
+        full_name = request.POST.get('full_name')
+        email = request.POST.get('email')
+        mobile = request.POST.get('mobile')
+        address = request.POST.get('address')
+        city = request.POST.get('city')
+        state = request.POST.get('state')
+        country = request.POST.get('country')
         
-        # Getting total amount for PayPal amount
-        for p_id, item in request.session['cart_data_obj'].items():
-            total_amount += int(item['qty']) * float(item['price'])
-    
-        # Create Order Objects        
-        order = CartOrder.objects.create(   
-            user=request.user,
-            price=total_amount,
-        )
+        request.session['full_name'] = full_name
+        request.session['email'] = email
+        request.session['mobile'] = mobile
+        request.session['address'] = address
+        request.session['city'] = city
+        request.session['state'] = state
+        request.session['country'] = country
+        
+        if 'cart_data_obj' in request.session:
+        
+            # Getting total amount for PayPal amount
+            for p_id, item in request.session['cart_data_obj'].items():
+                total_amount += int(item['qty']) * float(item['price'])
 
-        # Getting total amount for The Cart
-        for p_id, item in request.session['cart_data_obj'].items():
-            cart_total_amount += int(item['qty']) * float(item['price'])
-            
-            cart_order_items = CartOrderItems.objects.create(
-                order=order,
-                invoice_no="INVOICE_NO-" + str(order.id), # Return INVOICE_NO-5 for example
-                item=item['title'],
-                image=item['image'],
-                quantity=item['qty'],
-                price=item['price'],
-                total=float(item['qty']) * float(item['price']),
+            # Create Order Objects        
+            order = CartOrder.objects.create(   
+                user=request.user,
+                price=total_amount,
+                full_name=full_name,
+                email=email,
+                phone=mobile,
+                address=address,
+                city=city,
+                state=state,
+                country=country,
             )
+            
+            del request.session['full_name']
+            del request.session['email']
+            del request.session['mobile']
+            del request.session['address']
+            del request.session['city']
+            del request.session['state']
+            del request.session['country']
+
+            # Getting total amount for The Cart
+            for p_id, item in request.session['cart_data_obj'].items():
+                cart_total_amount += int(item['qty']) * float(item['price'])
+
+                cart_order_items = CartOrderItems.objects.create(
+                    order=order,
+                    invoice_no="INVOICE_NO-" + str(order.id), # Return INVOICE_NO-5 for example
+                    item=item['title'],
+                    image=item['image'],
+                    quantity=item['qty'],
+                    price=item['price'],
+                    total=float(item['qty']) * float(item['price']),
+                )
+
+        return redirect("core:checkout", order.oid)
+    return redirect("core:checkout", order.oid)
+
+
+def checkout(request, oid):
+    order = CartOrder.objects.get(oid=oid)
+    order_items = CartOrderItems.objects.filter(order=order)
     
-    host = request.get_host()
-    paypal_dict = {
-        'business': settings.PAYPAL_RECEIVER_EMAIL,
-        'amount': cart_total_amount,
-        'item_name': 'Order-Item-No-' + str(order.id),
-        'invoice': 'INV_NO-' + str(order.id),
-        'currency_code': 'USD',
-        'notify_url': 'http://{}{}'.format(host, reverse('core:paypal-ipn')),
-        'return_url': 'http://{}{}'.format(host, reverse('core:payment-completed')),
-        'cancel_url': 'http://{}{}'.format(host, reverse('core:payment-failed')),    
+    context = {
+        "order": order,
+        "order_items": order_items,
     }
     
-    paypal_payment_button = PayPalPaymentsForm(initial=paypal_dict)
-    
-    cart_total_amount = 0
-    if 'cart_data_obj' in request.session:
-        for p_id, item in request.session['cart_data_obj'].items():
-            cart_total_amount += int(item['qty']) * float(item['price'])
-    
-    try:  
-        active_address = Address.objects.get(user=request.user, status=True)
-    except:
-        messages.warning(request, "There are multiple addresses, only one should be activated.")
-        active_address = None # Like this the program won't break. But only the admin can mess with this.
-            
-    return render(request, "core/checkout.html", {"cart_data":request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj']), 'cart_total_amount':cart_total_amount, 'paypal_payment_button': paypal_payment_button, "active_address": active_address})
+    return render(request, "core/checkout.html", context)
 
 
 @login_required
@@ -354,9 +370,9 @@ def customer_dashboard(request):
     month = []
     total_orders = []
     
-    for o in orders:
-        month.append(calendar.month_name[o['month']])
-        total_orders.append(o['count'])
+    for i in orders:
+        month.append(calendar.month_name[i['month']])
+        total_orders.append(i['count'])
     
     if request.method == 'POST':
         address = request.POST.get('address')

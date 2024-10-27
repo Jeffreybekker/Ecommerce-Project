@@ -41,7 +41,7 @@ urlpatterns = [
     path("update-cart/", update_cart, name="update-cart"), # This urlpath must be the same as in the function.js
 
     # Checkout URL
-    path("checkout/", checkout_view, name="checkout"),
+    path("checkout/<oid>", checkout, name="checkout"),
     
     # PayPal URL
     path("paypal/", include('paypal.standard.ipn.urls')),
@@ -79,6 +79,7 @@ urlpatterns = [
     path("privacy-policy/", privacy_policy, name="privacy-policy"),
     path("terms-of-service/", terms_of_service, name="terms-of-service"),
     
-    
+    # New Routes
+    path("save_checkout_info", save_checkout_info, name="save_checkout_info")
     
 ]
