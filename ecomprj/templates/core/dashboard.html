@@ -52,12 +52,16 @@
                                             </div>
                                             <div class="card-body mb-2" style="display: flex; align-items: center; gap: 10px;">
                                                 <div>
+                                                    {% if profile.image %}
                                                     <span><img src="{{ profile.image.url }}" style="width: 150px; object-fit: cover; border-radius: 50%; height: 150px;"></span>
+                                                    {% else %}
+                                                    <span><img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" style="width: 150px; object-fit: cover; border-radius: 50%; height: 150px;"></span>
+                                                    {% endif %}
                                                 </div>
                                                 <div>
-                                                    <span><input class="mb-2" type="text" value="Name - {{ profile.full_name|title }}"></span>
-                                                    <span><input class="mb-2" type="text" value="Bio - {{ profile.bio|title }}"></span>
-                                                    <span><input class="mb-2" type="text" value="Phone - {{ profile.phone|title }}"></span>
+                                                    <span><input class="mb-2" type="text" value="Name:  {{ profile.full_name|title }}"></span>
+                                                    <span><input class="mb-2" type="text" value="Bio:  {{ profile.bio|title }}"></span>
+                                                    <span><input class="mb-2" type="text" value="Phone:  {{ profile.phone|title }}"></span>
                                                     {% if profile.verified == True %}
                                                     <div class="p-4 border rounded">
                                                         <span>Verified <i class="fas fa-check-circle text-success"></i></span>
@@ -68,7 +72,7 @@
                                                     </div>
                                                     {% endif %}
                                                     <div class="p-4 border rounded">
-                                                        <button class="btn btn-success">Edit Profile</button>
+                                                        <a href="{% url 'userauths:profile-update' %}" class="btn btn-success">Edit Profile</a>
                                                     </div>
                                                 </div>
                                             </div>

@@ -8,7 +8,7 @@ class ContactUsAdmin(admin.ModelAdmin):
     list_display = ['full_name', 'email', 'subject']
     
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['full_name', 'bio', 'phone']
+    list_display = ['user', 'full_name', 'bio', 'phone']
 
 # Register your models here.
 admin.site.register(User, UserAdmin)
