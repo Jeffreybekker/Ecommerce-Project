@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, JsonResponse
 from taggit.models import Tag
 from django.db.models import Avg, Count
-from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, ProductImages, ProductReview, Wishlist, Address
+from core.models import Coupon, Product, Category, Vendor, CartOrder, CartOrderItems, ProductImages, ProductReview, Wishlist, Address
 from userauths.models import ContactUs, Profile
 from core.forms import ProductReviewForm
 from django.template.loader import render_to_string
@@ -335,6 +335,27 @@ def checkout(request, oid):
     order = CartOrder.objects.get(oid=oid)
     order_items = CartOrderItems.objects.filter(order=order)
     
+    if request.method == "POST":
+        code = request.POST.get("code")
+        coupon = Coupon.objects.filter(code=code, active=True).first()
+        if coupon:
+            if coupon in order.coupons.all():
+                messages.warning(request, "Coupon already activated")
+                return redirect("core:checkout", order.oid)
+            else:
+                discount = order.price * coupon.discount / 100
+                order.coupons.add(coupon)
+                order.price -= discount
+                order.saved += discount
+                order.save()
+                
+                messages.success(request, "Coupon activated")
+                return redirect("core:checkout", order.oid)
+        else:
+            messages.warning(request, "Coupon Does Not Exist")
+            return redirect("core:checkout", order.oid)     
+
+            
     context = {
         "order": order,
         "order_items": order_items,
@@ -344,7 +365,7 @@ def checkout(request, oid):
 
 
 @login_required
-def payment_completed_view(request):
+def payment_completed_view(request): 
     
     cart_total_amount = 0
     if 'cart_data_obj' in request.session:

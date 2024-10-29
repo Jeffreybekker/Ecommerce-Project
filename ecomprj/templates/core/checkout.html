@@ -31,7 +31,7 @@
                                     <div class="col-sm-8">
                                         <div class="card-body">
                                             <h5 class="card-title">{{ o.item }}</h5>
-                                            <p class="card-text fs-sm">Qty: {{ o.quantity }}</p>
+                                            <p class="card-text fs-sm">Quantity: {{ o.quantity }}</p>
                                             <p class="card-text fs-sm">Price: ${{ o.price }}</p>
                                             <p class="card-text fs-sm">Total: ${{ o.total }}</p>
                                         </div>
@@ -71,14 +71,15 @@
                 <div class="row mb-50">
                     <div class="col-lg-12">
                         <form method="post" class="apply-coupon">
-                            <input type="text" placeholder="Enter Coupon Code..." />
-                            <button class="btn btn-md" name="login">Apply Coupon</button>
+                            {% csrf_token %}
+                            <input type="text" name="code" placeholder="Enter Coupon Code..." />
+                            <button class="btn btn-md" type="submit" name="login">Apply Coupon</button>
                         </form>
                     </div>
                 </div>
 
                 <button class="btn w-100" style="background-color: blueviolet">Pay With Stripe (Credit or Debit Card)</button>
-                <div id="paypal-button-container" class="mt-3"></div>
+                <button class="btn w-100" style="background-color: rgb(43, 98, 226)">Pay With PayPal</button>
             </div>
         </div>
     </div>
