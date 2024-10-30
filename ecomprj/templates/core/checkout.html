@@ -73,13 +73,13 @@
                         <form method="post" class="apply-coupon">
                             {% csrf_token %}
                             <input type="text" name="code" placeholder="Enter Coupon Code..." />
-                            <button class="btn btn-md" type="submit" name="login">Apply Coupon</button>
+                            <button class="btn btn-md" type="submit" name="login">Apply</button>
                         </form>
                     </div>
                 </div>
 
                 <button class="btn w-100" style="background-color: blueviolet">Pay With Stripe (Credit or Debit Card)</button>
-                <button class="btn w-100" style="background-color: rgb(43, 98, 226)">Pay With PayPal</button>
+                <div style="margin-top: 20px;" id="paypal-button-container"></div>
             </div>
         </div>
     </div>
@@ -90,7 +90,7 @@
 <script src="https://js.stripe.com/v3/"></script>
 
 <!-- Completed code for paypal payment -->
-<!-- <script>
+<script>
     paypal
         .Buttons({
             createOrder: function (data, actions) {
@@ -98,7 +98,7 @@
                     purchase_units: [
                         {
                             amount: {
-                                value: 100,
+                                value: "{{ order.price }}",
                             },
                         },
                     ],
@@ -109,13 +109,13 @@
                 return actions.order.capture().then(function (Detail) {
                     console.log(Detail);
                     if (Detail.status === "COMPLETED") {
-                        window.location.href = `/success/`;
+                        window.location.href = `/payment-completed/{{order.id}}/?status=${Detail.status}`;
                     }
                 });
             },
         })
         .render("#paypal-button-container");
-</script> -->
+</script>
 
 <!-- Completed code for paypal payment -->
 
