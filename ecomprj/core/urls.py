@@ -83,6 +83,6 @@ urlpatterns = [
     
     # New Routes
     path("save_checkout_info", save_checkout_info, name="save_checkout_info"),
-    path("api/create_checkout_session/<oid>", views.create_checkout_session, name="create_checkout_session"),
+    path("api/create_checkout_session/<oid>/", create_checkout_session, name="api_checkout_session"),
     
 ]

@@ -1,4 +1,3 @@
-from ast import arg
 from calendar import month
 from profile import Profile
 from django.core import serializers
@@ -362,38 +361,44 @@ def checkout(request, oid):
     context = {
         "order": order,
         "order_items": order_items,
+        "stripe_publishable_key": settings.STRIPE_PUBLIC_KEY,
     }
     
     return render(request, "core/checkout.html", context)
 
 
+@csrf_exempt
+@csrf_exempt
 def create_checkout_session(request, oid):
     order = CartOrder.objects.get(oid=oid)
     stripe.api_key = settings.STRIPE_SECRET_KEY
-    
+
     checkout_session = stripe.checkout.Session.create(
         customer_email = order.email,
-        payment_method_types= ['card'],
+        payment_method_types=['card'],
         line_items = [
             {
                 'price_data': {
-                    'currency': "USD",
+                    'currency': 'USD',
                     'product_data': {
-                        'name': order.full_name,
+                        'name': order.full_name
                     },
-                    'unit_amount': int(order.price * 1000),
+                    'unit_amount': int(order.price * 100)
                 },
-                'quantity': 1,            
+                'quantity': 1
             }
         ],
         mode = 'payment',
-        success_url = request.build_absolute_uri(reverse("core:payment-completed", args=[order.oid])) + "?session_id-{CHECKOUT_SESSION_ID}",
-        cancel_url = request.build_absolute_uri(reverse("core:payment-failed")),
+        success_url = request.build_absolute_uri(reverse("core:payment-completed", args=[order.oid])) + "?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url = request.build_absolute_uri(reverse("core:payment-completed", args=[order.oid]))
     )
 
     order.paid_status = False
     order.stripe_payment_intent = checkout_session['id']
     order.save()
+
+    print("checkkout session", checkout_session)
+    return JsonResponse({"sessionId": checkout_session.id})
     
 
 @login_required

@@ -78,7 +78,7 @@
                     </div>
                 </div>
 
-                <button class="btn w-100" style="background-color: blueviolet">Pay With Stripe (Credit or Debit Card)</button>
+                <button type="button" class="btn w-100" id="checkout-button" style="background-color: blueviolet">Pay With Stripe (Credit or Debit Card)</button>
                 <div style="margin-top: 20px;" id="paypal-button-container"></div>
             </div>
         </div>
@@ -119,16 +119,16 @@
 
 <!-- Completed code for paypal payment -->
 
-<!-- <script>
+<script>
     var stripe = Stripe("{{stripe_publishable_key}}");
     var checkoutButton = document.getElementById("checkout-button");
 
     checkoutButton.addEventListener("click", function () {
-        var email = "{{booking.email}}";
+        var email = "{{ order.email }}";
 
         checkoutButton.innerHTML = "Processing <i class='fas fa-spinner fa-spin'></i>";
 
-        fetch("/api/create_checkout_session/{{booking.booking_id}}/", {
+        fetch("/api/create_checkout_session/{{order.oid}}/", {
             method: "POST",
             body: JSON.stringify({ email: email }),
         })
@@ -149,5 +149,5 @@
                 console.log("Error: ", error);
             });
     });
-</script> -->
+</script>
 {% endblock content %}
