@@ -122,12 +122,12 @@
                                 
                                 <div class="d-flex justify-content-between mb-2">
                                     <p class="fw-bold">Total</p>
-                                    <p>${{cart_total_amount}}</p>
+                                    <p>${{cart_total_amount|floatformat:2}}</p>
                                 </div>
                             </div>
                         </div>
                         {% if totalcartitems %}
-                            <button type=submit" class="btn mb-20 w-100">Proceed To CheckOut<i class="fi-rs-sign-out ml-15"></i></button>
+                            <button type="submit" class="btn mb-20 w-100">Proceed To CheckOut<i class="fi-rs-sign-out ml-15"></i></button>
                         {% endif %}                    
                     </div>
                 </div>
