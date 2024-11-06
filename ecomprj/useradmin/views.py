@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from core.models import CartOrder, Product, Category
 from django.db.models import Sum
 from userauths.models import User
+from useradmin.forms import AddProductForm
 
 import datetime
 
@@ -30,7 +31,7 @@ def dashboard(request):
     return render(request, "useradmin/dashboard.html", context)
 
 
-def product(request):
+def products(request):
     all_products = Product.objects.all()
     all_categories = Category.objects.all()
     
@@ -40,3 +41,22 @@ def product(request):
         }
     
     return render(request, "useradmin/products.html", context)
+
+
+def add_product(request):
+    if request.method == "POST":
+        form = AddProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_form = form.save(commit=False)
+            new_form.user = request.user
+            new_form.save()
+            form.save_m2m()
+            return ("useradmin:dashboard")
+    else:
+        form = AddProductForm()
+    
+    context = {
+        "form": form,
+    }
+        
+    return render(request, "useradmin/add-product.html", context)
