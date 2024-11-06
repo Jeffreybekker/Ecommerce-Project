@@ -32,7 +32,7 @@ def dashboard(request):
 
 
 def products(request):
-    all_products = Product.objects.all()
+    all_products = Product.objects.all().order_by("-id")
     all_categories = Category.objects.all()
     
     context = {
@@ -51,7 +51,7 @@ def add_product(request):
             new_form.user = request.user
             new_form.save()
             form.save_m2m()
-            return ("useradmin:dashboard")
+            return redirect("useradmin:dashboard")
     else:
         form = AddProductForm()
     
