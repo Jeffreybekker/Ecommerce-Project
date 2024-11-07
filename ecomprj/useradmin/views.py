@@ -4,6 +4,7 @@ from django.db.models import Sum
 from userauths.models import User
 from useradmin.forms import AddProductForm
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 
 import datetime
 
@@ -112,6 +113,7 @@ def order_detail(request, id):
     return render(request, "useradmin/order_detail.html", context)
 
 
+@csrf_exempt
 def change_order_status(request, oid):
     order = CartOrder.objects.get(oid=oid)
     if request.method == "POST":
