@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
-from core.models import CartOrder, Product, Category
+from core.models import CartOrder, CartOrderItems, Product, Category
 from django.db.models import Sum
 from userauths.models import User
 from useradmin.forms import AddProductForm
+from django.contrib import messages
 
 import datetime
 
@@ -60,3 +61,63 @@ def add_product(request):
     }
         
     return render(request, "useradmin/add-product.html", context)
+
+
+def edit_product(request, pid):
+    product = Product.objects.get(pid=pid)
+    if request.method == "POST":
+        form = AddProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            new_form = form.save(commit=False)
+            new_form.user = request.user
+            new_form.save()
+            form.save_m2m()
+            return redirect("useradmin:edit-product", product.pid)
+    else:
+        form = AddProductForm(instance=product)
+    
+    context = {
+        "form": form,
+        "product": product,
+    }
+        
+    return render(request, "useradmin/edit-product.html", context)
+
+
+def delete_product(request, pid):
+    product = Product.objects.get(pid=pid)
+    product.delete()
+    return redirect("useradmin:products")
+
+
+def orders(request):
+    orders = CartOrder.objects.all()
+    
+    context = {
+        "orders": orders,
+    }
+    
+    return render(request, "useradmin/orders.html", context)
+ 
+ 
+def order_detail(request, id):
+    order = CartOrder.objects.get(id=id)
+    order_items = CartOrderItems.objects.filter(order=order)
+     
+    context = {
+        "order": order,
+        "order_items": order_items,
+    }
+     
+    return render(request, "useradmin/order_detail.html", context)
+
+
+def change_order_status(request, oid):
+    order = CartOrder.objects.get(oid=oid)
+    if request.method == "POST":
+        status = request.POST.get("status")
+        order.product_status = status
+        order.save()
+        messages.success(request, f"Order status changed to {status}")
+        
+    return redirect('useradmin:order-detail', order.id)
