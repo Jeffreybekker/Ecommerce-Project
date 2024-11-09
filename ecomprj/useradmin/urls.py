@@ -14,4 +14,5 @@ urlpatterns = [
     path("change-order-status/<oid>/", change_order_status, name="change-order-status"),
     path("shop-page/", shop_page, name="shop-page"),
     path("reviews/", reviews, name="reviews"),
+    path("settings/", settings, name="settings"),
 ]

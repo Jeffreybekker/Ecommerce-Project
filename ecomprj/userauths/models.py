@@ -21,6 +21,8 @@ class Profile(models.Model):
     full_name = models.CharField(max_length=200)
     bio = models.CharField(max_length=200, null=True, blank=True)
     phone = models.CharField(max_length=200)
+    address = models.CharField(max_length=200, null=True, blank=True)
+    country = models.CharField(max_length=200, null=True, blank=True)
     verified = models.BooleanField(default=False)
     
     def __str__(self):

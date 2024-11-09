@@ -1,5 +1,7 @@
+from email import contentmanager
 from django.shortcuts import render, redirect
 from core.models import CartOrder, CartOrderItems, Product, Category, ProductReview
+from userauths.models import Profile
 from django.db.models import Sum
 from userauths.models import User
 from useradmin.forms import AddProductForm
@@ -147,3 +149,33 @@ def reviews(request):
     }
     
     return render(request, "useradmin/reviews.html", context)
+
+
+def settings(request):
+    profile = Profile.objects.get(user=request.user)
+    if request.method == "POST":
+        image = request.FILES.get("image")
+        full_name = request.POST.get("full_name")
+        phone = request.POST.get("phone")
+        bio = request.POST.get("bio")
+        address = request.POST.get("address")
+        country = request.POST.get("country")
+        
+        if image != None:
+            profile.image = image
+            
+        profile.full_name = full_name
+        profile.phone = phone
+        profile.bio = bio
+        profile.address = address
+        profile.country = country
+        
+        profile.save()
+        messages.success(request, "Profile updated succesfully")
+        return redirect("useradmin:settings")
+    
+    context = {
+        "profile": profile,
+    }
+    
+    return render(request, "useradmin/settings.html", context)
