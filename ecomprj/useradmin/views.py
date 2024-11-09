@@ -1,4 +1,3 @@
-from email import contentmanager
 from django.shortcuts import render, redirect
 from core.models import CartOrder, CartOrderItems, Product, Category, ProductReview
 from userauths.models import Profile
@@ -7,9 +6,12 @@ from userauths.models import User
 from useradmin.forms import AddProductForm
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.hashers import check_password
+from useradmin.decorators import admin_required
 
 import datetime
 
+@admin_required
 def dashboard(request):
     revenue = CartOrder.objects.aggregate(price=Sum("price"))
     total_orders_count = CartOrder.objects.all()
@@ -35,6 +37,7 @@ def dashboard(request):
     return render(request, "useradmin/dashboard.html", context)
 
 
+@admin_required
 def products(request):
     all_products = Product.objects.all().order_by("-id")
     all_categories = Category.objects.all()
@@ -47,6 +50,7 @@ def products(request):
     return render(request, "useradmin/products.html", context)
 
 
+@admin_required
 def add_product(request):
     if request.method == "POST":
         form = AddProductForm(request.POST, request.FILES)
@@ -66,6 +70,7 @@ def add_product(request):
     return render(request, "useradmin/add-product.html", context)
 
 
+@admin_required
 def edit_product(request, pid):
     product = Product.objects.get(pid=pid)
     if request.method == "POST":
@@ -87,12 +92,14 @@ def edit_product(request, pid):
     return render(request, "useradmin/edit-product.html", context)
 
 
+@admin_required
 def delete_product(request, pid):
     product = Product.objects.get(pid=pid)
     product.delete()
     return redirect("useradmin:products")
 
 
+@admin_required
 def orders(request):
     orders = CartOrder.objects.all()
     
@@ -103,6 +110,7 @@ def orders(request):
     return render(request, "useradmin/orders.html", context)
  
  
+@admin_required
 def order_detail(request, id):
     order = CartOrder.objects.get(id=id)
     order_items = CartOrderItems.objects.filter(order=order)
@@ -126,7 +134,7 @@ def change_order_status(request, oid):
         
     return redirect('useradmin:order-detail', order.id)
 
-
+@admin_required
 def shop_page(request):
     products = Product.objects.all()
     revenue = CartOrder.objects.aggregate(price=Sum("price"))
@@ -140,7 +148,8 @@ def shop_page(request):
     
     return render(request, "useradmin/shop-page.html", context)
     
-
+    
+@admin_required
 def reviews(request):
     reviews = ProductReview.objects.all()
     
@@ -151,6 +160,7 @@ def reviews(request):
     return render(request, "useradmin/reviews.html", context)
 
 
+@admin_required
 def settings(request):
     profile = Profile.objects.get(user=request.user)
     if request.method == "POST":
@@ -179,3 +189,28 @@ def settings(request):
     }
     
     return render(request, "useradmin/settings.html", context)
+
+
+@admin_required
+def change_password(request):
+    user = request.user
+    
+    if request.method == "POST":
+        old_password = request.POST.get("old_password")
+        new_password = request.POST.get("new_password")
+        confirm_new_password = request.POST.get("confirm_new_password")
+        
+        if confirm_new_password != new_password:
+            messages.warning(request, "Password does not match")
+            return redirect("useradmin:change-password")
+        
+        if check_password(old_password, user.password):
+            user.set_password(new_password)
+            user.save()
+            messages.success(request, "Password changed successfully")
+            return redirect("useradmin:change-password")
+        else:
+            messages.warning(request, "Old password is incorrect")
+            return redirect("useradmin:change-password")
+    
+    return render(request, "useradmin/change-password.html")

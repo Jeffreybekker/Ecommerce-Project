@@ -15,4 +15,5 @@ urlpatterns = [
     path("shop-page/", shop_page, name="shop-page"),
     path("reviews/", reviews, name="reviews"),
     path("settings/", settings, name="settings"),
+    path("change-password/", change_password, name="change-password"),
 ]
