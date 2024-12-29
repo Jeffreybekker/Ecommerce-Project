@@ -7,5 +7,5 @@ Furthermore, I have learned how to integrate Paypal and Stripe and how to test i
 <p>The templates I have bought from <a href="https://selar.co/ecommerce-source-code">Selar</a>. Those templates were static, which I made later dynamic.</p>
 
 <h2>Table of Contents</h2>
-*[Ecommerce Project](#Ecommerce-Project)
-  *[Description](#Description)
+*[Ecommerce Project](#ecommerce-project)
+  *[Description](#description)
