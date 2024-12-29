@@ -9,6 +9,7 @@ Furthermore, I have learned how to integrate Paypal and Stripe and how to test i
 ## Table of Contents
 * [Ecommerce Project](#ecommerce-project)
   * [Description](#description)
+  * [Installation](#installation)
 
 ## Installation
 <p></p>
