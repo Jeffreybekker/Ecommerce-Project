@@ -10,3 +10,5 @@ Furthermore, I have learned how to integrate Paypal and Stripe and how to test i
 * [Ecommerce Project](#ecommerce-project)
   * [Description](#description)
 
+## Installation
+<p></p>
