@@ -1,1 +1,3 @@
-<h1>Big Ecommerce Project</h1>
+<h1>Advanced Ecommerce Project</h1>
+
+<h2>Description</h2>
