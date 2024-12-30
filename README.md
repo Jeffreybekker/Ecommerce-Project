@@ -11,10 +11,10 @@ Furthermore, I have learned how to integrate Paypal and Stripe and how to test i
 ### A snippet of the homepage
 ![image](https://github.com/user-attachments/assets/4f27c904-88e7-4460-bff8-17195a879a68)
 
-### Cart
+### Summary cart
 ![image](https://github.com/user-attachments/assets/d214575a-5652-4cb8-a972-99d46ea416f6)
 
-### Summary cart
+### Checkout cart
 ![image](https://github.com/user-attachments/assets/bf2b9434-467c-4e2c-a0a4-703084d9f6b3)
 
 ### Stripe for payment
@@ -25,6 +25,7 @@ Furthermore, I have learned how to integrate Paypal and Stripe and how to test i
 ## Table of Contents
 * [Ecommerce Project](#ecommerce-project)
   * [Description](#description)
+  * [Screenshots](#screenshots)
   * [Installation](#installation)
 
 ## Installation
