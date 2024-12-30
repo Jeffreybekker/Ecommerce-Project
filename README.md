@@ -16,7 +16,9 @@ Furthermore, I have learned how to integrate Paypal and Stripe and how to test i
 ```
 bash git clone https://github.com/Jeffreybekker/Ecommerce-Project.git
 ```
-2. Install dependencies:
+2. Start a virtual environment, you can get more information about this <a href="https://docs.python.org/3/tutorial/venv.html">here</a>
+
+4. Install dependencies:
 ```
 pip install -r requirements.txt
 ```
