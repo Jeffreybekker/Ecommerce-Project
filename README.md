@@ -9,7 +9,7 @@ Furthermore, I have learned how to integrate Paypal and Stripe and how to test i
 ## Screenshots
 
 ### A snippet of the homepage
-<img src="https://github.com/user-attachments/assets/4f27c904-88e7-4460-bff8-17195a879a68" alt="image" width="200" height="150">
+<img src="https://github.com/user-attachments/assets/4f27c904-88e7-4460-bff8-17195a879a68" alt="image" width="500" height="250">
 
 ### Summary cart
 ![image](https://github.com/user-attachments/assets/d214575a-5652-4cb8-a972-99d46ea416f6)
