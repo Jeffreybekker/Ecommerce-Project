@@ -11,6 +11,7 @@ Furthermore, I have learned how to integrate Paypal and Stripe and how to test i
   * [Description](#description)
   * [Screenshots](#screenshots)
   * [Installation](#installation)
+  * [Features](#features)
 
 ## Screenshots
 
@@ -35,9 +36,9 @@ bash git clone https://github.com/Jeffreybekker/Ecommerce-Project.git
 ```
 python -m venv env
 ```
-4. Start the virtual environment, depending on your system. You can get more information about this <a href="https://docs.python.org/3/tutorial/venv.html">here</a>.
+3. Start the virtual environment, depending on your system. You can get more information about this <a href="https://docs.python.org/3/tutorial/venv.html">here</a>.
 
-5. Install dependencies:
+4. Install dependencies:
 ```
 pip install -r requirements.txt
 ```
@@ -50,4 +51,4 @@ pip install -r requirements.txt
 * Admin Panel using Jazzmin
 * Adding, updating and deleting products in Admin
 * Pages dynamic with JavaScript and Ajax
-* Userdashboard where you can update the profile and see statistics
+* User dashboard where you can update the profile and see statistics
