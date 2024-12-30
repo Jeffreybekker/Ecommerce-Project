@@ -21,10 +21,10 @@ Furthermore, I have learned how to integrate Paypal and Stripe and how to test i
 <img src="https://github.com/user-attachments/assets/1e9731cc-b76e-4df2-922c-50b4c23ea4b2" alt="image" width="700" height="350">
 
 ##### Checkout cart
-<img src="https://github.com/user-attachments/assets/bf2b9434-467c-4e2c-a0a4-703084d9f6b3" alt="image" width="700" height="350">
+<img src="https://github.com/user-attachments/assets/89f7a1cb-2783-4880-bc67-c4fd57166781" alt="image" width="700" height="350">
 
 ##### Stripe for payment (in test mode)
-<img src="https://github.com/user-attachments/assets/3071958d-06ab-45cf-adf9-684ff126c925" alt="image" width="700" height="350">
+<img src="https://github.com/user-attachments/assets/5c3df542-af73-42bf-8fee-85e015eb0bfd" alt="image" width="700" height="350">
 
 ## Installation
 1. Clone the Repository:
