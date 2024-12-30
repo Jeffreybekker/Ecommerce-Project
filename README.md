@@ -6,26 +6,25 @@
 Furthermore, I have learned how to integrate Paypal and Stripe and how to test if it works correctly.</p>
 <p>The templates I have bought from <a href="https://selar.co/ecommerce-source-code">Selar</a>. Those templates were static, which I made later dynamic.</p>
 
+## Table of Contents
+* [Ecommerce Project](#ecommerce-project)
+  * [Description](#description)
+  * [Screenshots](#screenshots)
+  * [Installation](#installation)
+
 ## Screenshots
 
 ##### A snippet of the homepage
 <img src="https://github.com/user-attachments/assets/4f27c904-88e7-4460-bff8-17195a879a68" alt="image" width="700" height="350">
 
 ##### Summary cart
-<img src="https://github.com/user-attachments/assets/d214575a-5652-4cb8-a972-99d46ea416f6" alt="image" width="700" height="350">
+<img src="[https://github.com/user-attachments/assets/d214575a-5652-4cb8-a972-99d46ea416f6](https://github.com/user-attachments/assets/1e9731cc-b76e-4df2-922c-50b4c23ea4b2)" alt="image" width="700" height="350">
 
 ##### Checkout cart
 <img src="https://github.com/user-attachments/assets/bf2b9434-467c-4e2c-a0a4-703084d9f6b3" alt="image" width="700" height="350">
 
 ##### Stripe for payment (in test mode)
 <img src="https://github.com/user-attachments/assets/3071958d-06ab-45cf-adf9-684ff126c925" alt="image" width="700" height="350">
-
-
-## Table of Contents
-* [Ecommerce Project](#ecommerce-project)
-  * [Description](#description)
-  * [Screenshots](#screenshots)
-  * [Installation](#installation)
 
 ## Installation
 1. Clone the Repository:
@@ -42,3 +41,13 @@ python -m venv env
 ```
 pip install -r requirements.txt
 ```
+
+## Features
+* Creating user
+* Signing in and out
+* Filtering product on price and category
+* Payment with PayPal and Stripe
+* Admin Panel using Jazzmin
+* Adding, updating and deleting products in Admin
+* Pages dynamic with JavaScript and Ajax
+* Userdashboard where you can update the profile and see statistics
