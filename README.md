@@ -13,4 +13,6 @@ Furthermore, I have learned how to integrate Paypal and Stripe and how to test i
 
 ## Installation
 1. Clone the Repository:
-```bash git clone https://github.com/Jeffreybekker/Ecommerce-Project.git```
+```http
+bash git clone https://github.com/Jeffreybekker/Ecommerce-Project.git
+```
