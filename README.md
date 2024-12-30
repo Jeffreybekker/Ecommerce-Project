@@ -6,6 +6,10 @@
 Furthermore, I have learned how to integrate Paypal and Stripe and how to test if it works correctly.</p>
 <p>The templates I have bought from <a href="https://selar.co/ecommerce-source-code">Selar</a>. Those templates were static, which I made later dynamic.</p>
 
+## Screenshots
+![image](https://github.com/user-attachments/assets/053ee436-86e0-404c-8e89-c546d225b4ae)
+
+
 ## Table of Contents
 * [Ecommerce Project](#ecommerce-project)
   * [Description](#description)
