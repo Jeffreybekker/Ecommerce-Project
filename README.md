@@ -16,3 +16,7 @@ Furthermore, I have learned how to integrate Paypal and Stripe and how to test i
 ```
 bash git clone https://github.com/Jeffreybekker/Ecommerce-Project.git
 ```
+2. Install dependencies:
+```
+pip install -r requirements.txt
+```
