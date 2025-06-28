@@ -1,5 +1,5 @@
 from django.urls import path
-from useradmin.views import *
+from useradmin.views import dashboard, products, add_product, edit_product, delete_product, orders, order_detail, change_order_status, shop_page, reviews, settings, change_password
 
 app_name = "useradmin"
 

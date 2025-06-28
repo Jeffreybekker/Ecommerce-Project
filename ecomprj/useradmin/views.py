@@ -8,8 +8,8 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import check_password
 from useradmin.decorators import admin_required
-
 import datetime
+
 
 @admin_required
 def dashboard(request):
@@ -19,11 +19,11 @@ def dashboard(request):
     all_categories = Category.objects.all()
     new_customers = User.objects.all(). order_by("-id")
     latest_orders = CartOrder.objects.all()
-    
+
     this_month = datetime.datetime.now().month
-    
+
     monthly_revenue = CartOrder.objects.filter(order_date__month=this_month).aggregate(price=Sum("price"))
-    
+
     context = {
         "revenue": revenue,
         "total_orders_count": total_orders_count,
@@ -33,7 +33,7 @@ def dashboard(request):
         "latest_orders": latest_orders,
         "monthly_revenue": monthly_revenue,
     }
-    
+
     return render(request, "useradmin/dashboard.html", context)
 
 
@@ -41,12 +41,12 @@ def dashboard(request):
 def products(request):
     all_products = Product.objects.all().order_by("-id")
     all_categories = Category.objects.all()
-    
+
     context = {
         "all_products": all_products,
         "all_categories": all_categories,
         }
-    
+
     return render(request, "useradmin/products.html", context)
 
 
@@ -62,11 +62,10 @@ def add_product(request):
             return redirect("useradmin:dashboard")
     else:
         form = AddProductForm()
-    
+
     context = {
         "form": form,
     }
-        
     return render(request, "useradmin/add-product.html", context)
 
 
@@ -83,12 +82,11 @@ def edit_product(request, pid):
             return redirect("useradmin:edit-product", product.pid)
     else:
         form = AddProductForm(instance=product)
-    
+
     context = {
         "form": form,
         "product": product,
     }
-        
     return render(request, "useradmin/edit-product.html", context)
 
 
@@ -102,24 +100,22 @@ def delete_product(request, pid):
 @admin_required
 def orders(request):
     orders = CartOrder.objects.all()
-    
+
     context = {
         "orders": orders,
     }
-    
     return render(request, "useradmin/orders.html", context)
- 
- 
+
+
 @admin_required
 def order_detail(request, id):
     order = CartOrder.objects.get(id=id)
     order_items = CartOrderItems.objects.filter(order=order)
-     
+
     context = {
         "order": order,
         "order_items": order_items,
     }
-     
     return render(request, "useradmin/order_detail.html", context)
 
 
@@ -131,8 +127,8 @@ def change_order_status(request, oid):
         order.product_status = status
         order.save()
         messages.success(request, f"Order status changed to {status}")
-        
     return redirect('useradmin:order-detail', order.id)
+
 
 @admin_required
 def shop_page(request):
@@ -145,18 +141,16 @@ def shop_page(request):
         "revenue": revenue,
         "total_sales": total_sales,
     }
-    
     return render(request, "useradmin/shop-page.html", context)
-    
-    
+
+
 @admin_required
 def reviews(request):
     reviews = ProductReview.objects.all()
-    
+
     context = {
         "reviews": reviews,
     }
-    
     return render(request, "useradmin/reviews.html", context)
 
 
@@ -170,40 +164,38 @@ def settings(request):
         bio = request.POST.get("bio")
         address = request.POST.get("address")
         country = request.POST.get("country")
-        
+
         if image != None:
             profile.image = image
-            
+
         profile.full_name = full_name
         profile.phone = phone
         profile.bio = bio
         profile.address = address
         profile.country = country
-        
+
         profile.save()
         messages.success(request, "Profile updated succesfully")
         return redirect("useradmin:settings")
-    
+
     context = {
         "profile": profile,
     }
-    
     return render(request, "useradmin/settings.html", context)
 
 
 @admin_required
 def change_password(request):
     user = request.user
-    
+
     if request.method == "POST":
         old_password = request.POST.get("old_password")
         new_password = request.POST.get("new_password")
         confirm_new_password = request.POST.get("confirm_new_password")
-        
+
         if confirm_new_password != new_password:
             messages.warning(request, "Password does not match")
             return redirect("useradmin:change-password")
-        
         if check_password(old_password, user.password):
             user.set_password(new_password)
             user.save()
@@ -212,5 +204,5 @@ def change_password(request):
         else:
             messages.warning(request, "Old password is incorrect")
             return redirect("useradmin:change-password")
-    
+
     return render(request, "useradmin/change-password.html")

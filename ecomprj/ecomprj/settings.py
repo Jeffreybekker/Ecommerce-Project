@@ -12,11 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
-# This is imported to keep data securely
-from environs import Env
-env = Env()
-env.read_env()
+load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,12 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-41zh2045t$2j)5d-r_u&$31w-q^!55p7pbn^vpogax5vph$p)@'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DJANGO_DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
 
 
@@ -46,14 +44,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     # Third party
-    'taggit', 
+    'taggit',
     'django_ckeditor_5',
-    
+
     # PayPal Integration
     'paypal.standard.ipn',
-    
+
     # Custom Apps
     'core',
     'userauths',
@@ -159,7 +157,7 @@ JAZZMIN_SETTINGS = {
     'copyright': 'jeffreys-shop.com',
 }
 
-LOGIN_URL = "userauths:sign-in" # You use this to login.
+LOGIN_URL = "userauths:sign-in"  # You use this to login.
 
 AUTH_USER_MODEL = 'userauths.User'
 
@@ -193,11 +191,10 @@ customColorPalette = [
 # CKEDITOR_5_CUSTOM_CSS = 'path_to.css' # optional
 # CKEDITOR_5_FILE_STORAGE = "path_to_storage.CustomStorage" # optional
 CKEDITOR_5_CONFIGS = {
-  'default': {
-      'toolbar': ['heading', '|', 'bold', 'italic', 'link',
-                  'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', ],
-
-    },
+    'default': {
+        'toolbar': ['heading', '|', 'bold', 'italic', 'link',
+                    'bulletedList', 'numberedList', 'blockQuote', 'imageUpload'],
+                    },
     'extends': {
         'blockToolbar': [
             'paragraph', 'heading1', 'heading2', 'heading3',
@@ -205,27 +202,26 @@ CKEDITOR_5_CONFIGS = {
             'bulletedList', 'numberedList',
             '|',
             'blockQuote', 'imageUpload'
-        ],
+            ],
         'toolbar': ['heading', '|', 'outdent', 'indent', '|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
-        'code','subscript', 'superscript', 'highlight', '|', 'codeBlock', 'sourceEditing',
+                    'code', 'subscript', 'superscript', 'highlight', '|', 'codeBlock', 'sourceEditing',
                     'bulletedList', 'numberedList', 'todoList', '|',  'blockQuote', 'imageUpload', '|',
                     'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'mediaEmbed', 'removeFormat',
                     'insertTable',],
         'image': {
             'toolbar': ['imageTextAlternative', '|', 'imageStyle:alignLeft',
-                        'imageStyle:alignRight', 'imageStyle:alignCenter', 'imageStyle:side',  '|'],
+                        'imageStyle:alignRight', 'imageStyle:alignCenter', 'imageStyle:side', '|'],
             'styles': [
                 'full',
                 'side',
                 'alignLeft',
                 'alignRight',
                 'alignCenter',
-            ]
-
+            ],
         },
         'table': {
-            'contentToolbar': [ 'tableColumn', 'tableRow', 'mergeTableCells',
-            'tableProperties', 'tableCellProperties' ],
+            'contentToolbar': ['tableColumn', 'tableRow', 'mergeTableCells',
+                               'tableProperties', 'tableCellProperties'],
             'tableProperties': {
                 'borderColors': customColorPalette,
                 'backgroundColors': customColorPalette
@@ -233,29 +229,29 @@ CKEDITOR_5_CONFIGS = {
             'tableCellProperties': {
                 'borderColors': customColorPalette,
                 'backgroundColors': customColorPalette
-            }
+            },
         },
-        'heading' : {
+        'heading': {
             'options': [
-                { 'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph' },
-                { 'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1' },
-                { 'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2' },
-                { 'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3' }
-            ]
-        }
+                {'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph'},
+                {'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1'},
+                {'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2'},
+                {'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3'},
+            ],
+        },
     },
     'list': {
         'properties': {
             'styles': 'true',
             'startIndex': 'true',
             'reversed': 'true',
-        }
-    }
+        },
+    },
 }
 
 PAYPAL_RECEIVER_EMAIL = 'sb-c5xgx6555500@business.example.com'
 PAYPAL_TEST = True
 
 
-STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
-STRIPE_PUBLIC_KEY = env("STRIPE_PUBLIC_KEY")
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY")

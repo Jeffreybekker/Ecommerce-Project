@@ -34,7 +34,7 @@ git clone https://github.com/Jeffreybekker/Ecommerce-Project.git
 ```
 2. Create a virtual environment:
 ```
-python -m venv env
+python -m venv venv
 ```
 3. Start the virtual environment, depending on your system. You can get more information about this <a href="https://docs.python.org/3/tutorial/venv.html">here</a>.
 

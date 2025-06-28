@@ -1,5 +1,6 @@
 from core.models import Product
-from django import forms 
+from django import forms
+
 
 class AddProductForm(forms.ModelForm):
     title = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter product title", "class": "form-control"}))
@@ -12,7 +13,7 @@ class AddProductForm(forms.ModelForm):
     mfd = forms.DateTimeField(widget=forms.DateTimeInput(attrs={"placeholder": "e.g. 22-11-2024", "class": "form-control"}))
     tags = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Tags", "class": "form-control"}))
     image = forms.ImageField(widget=forms.FileInput(attrs={"class": "form-control"}))
-    
+
     class Meta:
         model = Product
         fields = [
