@@ -1,5 +1,15 @@
 from django.urls import path, include
-from core.views import index, product_list_view, product_detail_view, category_list_view, category_product_list_view, vendor_list_view, vendor_detail_view, tag_list, ajax_add_review, search_view, filter_product, add_to_cart, cart_view, delete_item_from_cart, update_cart, checkout, payment_completed_view, payment_failed, customer_dashboard, order_detail, make_address_default, wishlist_view, add_to_wishlist, remove_wishlist, contact, ajax_contact_form, about_us, purchase_guide, privacy_policy, terms_of_service, save_checkout_info, create_checkout_session
+from core.views import (index, product_list_view, product_detail_view,
+                        category_list_view, category_product_list_view,
+                        vendor_list_view, vendor_detail_view, tag_list,
+                        ajax_add_review, search_view, filter_product,
+                        add_to_cart, cart_view, delete_item_from_cart,
+                        update_cart, checkout, payment_completed_view,
+                        payment_failed, customer_dashboard, order_detail,
+                        make_address_default, wishlist_view, add_to_wishlist,
+                        remove_wishlist, contact, ajax_contact_form, about_us,
+                        purchase_guide, privacy_policy, terms_of_service,
+                        save_checkout_info, create_checkout_session)
 app_name = "core"
 
 urlpatterns = [
@@ -37,8 +47,8 @@ urlpatterns = [
     # Delete item from cart
     path("delete-from-cart/", delete_item_from_cart, name="delete-from-cart"),
 
-    # Update cart
-    path("update-cart/", update_cart, name="update-cart"),  # This urlpath must be the same as in the function.js
+    # Update cart -- this urlpath must be the same as in the function.js
+    path("update-cart/", update_cart, name="update-cart"),
 
     # Checkout URL
     path("checkout/<oid>", checkout, name="checkout"),
@@ -81,5 +91,6 @@ urlpatterns = [
 
     # New Routes
     path("save_checkout_info", save_checkout_info, name="save_checkout_info"),
-    path("api/create_checkout_session/<oid>/", create_checkout_session, name="api_checkout_session"),
+    path("api/create_checkout_session/<oid>/", create_checkout_session,
+         name="api_checkout_session"),
 ]

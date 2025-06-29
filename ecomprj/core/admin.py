@@ -1,5 +1,7 @@
 from django.contrib import admin
-from core.models import Product, Coupon, Category, Vendor, CartOrder, CartOrderItems, ProductImages, ProductReview, Wishlist, Address
+from core.models import (Product, Coupon, Category, Vendor,
+                         CartOrder, CartOrderItems, ProductImages,
+                         ProductReview, Wishlist, Address)
 
 
 class ProductImagesAdmin(admin.TabularInline):
@@ -8,7 +10,8 @@ class ProductImagesAdmin(admin.TabularInline):
 
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductImagesAdmin]
-    list_display = ['user', 'title', 'product_image', 'price', 'category', 'vendor', 'featured', 'product_status', 'pid']
+    list_display = ['user', 'title', 'product_image', 'price', 'category',
+                    'vendor', 'featured', 'product_status', 'pid']
 
 
 class CategoryAdmin(admin.ModelAdmin):

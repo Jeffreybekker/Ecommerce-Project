@@ -33,7 +33,8 @@ def user_directory_path(instance, filename):
 
 
 class Category(models.Model):
-    cid = ShortUUIDField(unique=True, length=10, max_length=20, prefix="cat", alphabet="abcdefgh12345")
+    cid = ShortUUIDField(unique=True, length=10, max_length=20,
+                         prefix="cat", alphabet="abcdefgh12345")
     title = models.CharField(max_length=100, default="Food")
     image = models.ImageField(upload_to="category", default="category.jpg")
 
@@ -52,13 +53,15 @@ class Tags(models.Model):
 
 
 class Vendor(models.Model):
-    vid = ShortUUIDField(unique=True, length=10, max_length=20, prefix="ven", alphabet="abcdefgh12345")
+    vid = ShortUUIDField(unique=True, length=10, max_length=20,
+                         prefix="ven", alphabet="abcdefgh12345")
 
     title = models.CharField(max_length=100, default="Nestify")
     image = models.ImageField(upload_to=user_directory_path, default="vendor.jpg")
     cover_image = models.ImageField(upload_to=user_directory_path, default="vendor.jpg")
     # description = models.TextField(null=True, blank=True, default="I am an Amazing Vendor")
-    description = CKEditor5Field(null=True, blank=True, default="I am an Amazing Vendor", config_name="extends")
+    description = CKEditor5Field(null=True, blank=True, default="I am an Amazing Vendor",
+                                 config_name="extends")
 
     address = models.CharField(max_length=100, default="123 Main Street")
     contact = models.CharField(max_length=100, default="+123 (456) 789")
@@ -85,13 +88,15 @@ class Product(models.Model):
     pid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefgh12345")
 
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="category")
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL,
+                                 null=True, related_name="category")
     vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True, related_name="vendor")
 
     title = models.CharField(max_length=100, default="Fresh Pear")
     image = models.ImageField(upload_to=user_directory_path, default="product.jpg")
     # description = models.TextField(null=True, blank=True, default="This is the product")
-    description = CKEditor5Field(null=True, blank=True, default="This is the product", config_name="extends")
+    description = CKEditor5Field(null=True, blank=True, default="This is the product",
+                                 config_name="extends")
 
     price = models.DecimalField(max_digits=12, decimal_places=2, default="1.99")
     old_price = models.DecimalField(max_digits=12, decimal_places=2, default="2.99")
@@ -135,7 +140,8 @@ class Product(models.Model):
 
 class ProductImages(models.Model):
     images = models.ImageField(upload_to="product_images", default="product.jpg")
-    product = models.ForeignKey(Product, related_name="p_images", on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(Product, related_name="p_images",
+                                on_delete=models.SET_NULL, null=True)
     date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -163,8 +169,10 @@ class CartOrder(models.Model):
 
     paid_status = models.BooleanField(default=False)
     order_date = models.DateTimeField(auto_now_add=True)
-    product_status = models.CharField(choices=STATUS_CHOICE, max_length=30, default="processing", null=True, blank=True)
-    sku = ShortUUIDField(null=True, blank=True, length=5, prefix="SKU", max_length=20, alphabet="1234567890")
+    product_status = models.CharField(choices=STATUS_CHOICE, max_length=30, default="processing",
+                                      null=True, blank=True)
+    sku = ShortUUIDField(null=True, blank=True, length=5, prefix="SKU",
+                         max_length=20, alphabet="1234567890")
     oid = ShortUUIDField(null=True, blank=True, length=5, max_length=20, alphabet="1234567890")
 
     stripe_payment_intent = models.CharField(max_length=1000, null=True, blank=True)
@@ -193,7 +201,8 @@ class CartOrderItems(models.Model):
 # Product Review, wishlists, Address
 class ProductReview(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, related_name="reviews")
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL,
+                                null=True, related_name="reviews")
     review = models.TextField()
     rating = models.IntegerField(choices=RATING, default=None)
     date = models.DateTimeField(auto_now_add=True)

@@ -22,7 +22,8 @@ def dashboard(request):
 
     this_month = datetime.datetime.now().month
 
-    monthly_revenue = CartOrder.objects.filter(order_date__month=this_month).aggregate(price=Sum("price"))
+    monthly_revenue = CartOrder.objects.filter(
+                      order_date__month=this_month).aggregate(price=Sum("price"))
 
     context = {
         "revenue": revenue,
@@ -134,7 +135,8 @@ def change_order_status(request, oid):
 def shop_page(request):
     products = Product.objects.all()
     revenue = CartOrder.objects.aggregate(price=Sum("price"))
-    total_sales = CartOrderItems.objects.filter(order__paid_status=True).aggregate(quantity=Sum("quantity"))
+    total_sales = CartOrderItems.objects.filter(
+                  order__paid_status=True).aggregate(quantity=Sum("quantity"))
 
     context = {
         "products": products,
@@ -165,7 +167,7 @@ def settings(request):
         address = request.POST.get("address")
         country = request.POST.get("country")
 
-        if image != None:
+        if image is not None:
             profile.image = image
 
         profile.full_name = full_name

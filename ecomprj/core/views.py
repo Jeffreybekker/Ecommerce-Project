@@ -1,11 +1,11 @@
 from calendar import month
-from profile import Profile
 from django.core import serializers
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from taggit.models import Tag
 from django.db.models import Avg, Count
-from core.models import Coupon, Product, Category, Vendor, CartOrder, CartOrderItems, ProductReview, Wishlist, Address
+from core.models import (Coupon, Product, Category, Vendor, CartOrder,
+                         CartOrderItems, ProductReview, Wishlist, Address)
 from userauths.models import ContactUs, Profile
 from core.forms import ProductReviewForm
 from django.template.loader import render_to_string
@@ -15,7 +15,7 @@ from django.urls import reverse
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from paypal.standard.forms import PayPalPaymentsForm
+# from paypal.standard.forms import PayPalPaymentsForm
 
 import calendar
 from django.db.models.functions import ExtractMonth
@@ -138,10 +138,10 @@ def ajax_add_review(request, pid):
     user = request.user
 
     review = ProductReview.objects.create(
-        user =user,
+        user=user,
         product=product,
-        review = request.POST['review'],
-        rating = request.POST['rating'],
+        review=request.POST['review'],
+        rating=request.POST['rating'],
     )
 
     context = {
@@ -210,7 +210,7 @@ def add_to_cart(request):
         if str(request.GET['id']) in request.session['cart_data_obj']:
 
             cart_data = request.session['cart_data_obj']
-            cart_data[str(request.GET['id'])]['qty'] = int(cart_product[str(request.GET['id'])]['qty'])
+            cart_data[str(request.GET['id'])]['qty'] = int(cart_product[str(request.GET['id'])]['qty'])  # noqa E501
             cart_data.update(cart_data)
             request.session['cart_data_obj'] = cart_data
         else:
@@ -220,7 +220,8 @@ def add_to_cart(request):
 
     else:
         request.session['cart_data_obj'] = cart_product
-    return JsonResponse({"data": request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj'])})
+    return JsonResponse({"data": request.session['cart_data_obj'],
+                         'totalcartitems': len(request.session['cart_data_obj'])})
 
 
 def cart_view(request):
@@ -228,7 +229,10 @@ def cart_view(request):
     if 'cart_data_obj' in request.session:
         for p_id, item in request.session['cart_data_obj'].items():
             cart_total_amount += int(item['qty']) * float(item['price'])
-        return render(request, "core/cart.html", {"cart_data": request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj']), 'cart_total_amount': cart_total_amount})
+        return render(request, "core/cart.html",
+                      {"cart_data": request.session['cart_data_obj'],
+                       'totalcartitems': len(request.session['cart_data_obj']),
+                       'cart_total_amount': cart_total_amount})
     else:
         messages.warning(request, "Your cart is empty")
         return redirect("core:index")
@@ -247,18 +251,24 @@ def delete_item_from_cart(request):
         for p_id, item in request.session['cart_data_obj'].items():
             cart_total_amount += int(item['qty']) * float(item['price'])
 
-    context = render_to_string("core/async/cart-list.html", {"cart_data": request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj']), 'cart_total_amount': cart_total_amount})
+    context = render_to_string("core/async/cart-list.html",
+                               {"cart_data": request.session['cart_data_obj'],
+                                'totalcartitems': len(request.session['cart_data_obj']),
+                                'cart_total_amount': cart_total_amount})
     return JsonResponse({"data": context, "totalcartitems": len(request.session['cart_data_obj'])})
 
 
 def update_cart(request):
     product_id = str(request.GET['id'])
-    product_qty = request.GET['qty']  # The qty is related to the function.js -> update-product. (is linked to 1 (below))(linked too function.js)
+    # The qty is related to the function.js -> update-product.
+    # (is linked to 1 (below))(linked too function.js)
+    product_qty = request.GET['qty']
 
     if 'cart_data_obj' in request.session:
         if product_id in request.session['cart_data_obj']:
             cart_data = request.session['cart_data_obj']
-            cart_data[str(request.GET['id'])]['qty'] = product_qty  # The part before equal sign is related too: (1)
+            # The part before equal sign is related too: (1)
+            cart_data[str(request.GET['id'])]['qty'] = product_qty
             request.session['cart_data_obj'] = cart_data
 
     cart_total_amount = 0
@@ -266,7 +276,10 @@ def update_cart(request):
         for p_id, item in request.session['cart_data_obj'].items():
             cart_total_amount += int(item['qty']) * float(item['price'])
 
-    context = render_to_string("core/async/cart-list.html", {"cart_data": request.session['cart_data_obj'], 'totalcartitems': len(request.session['cart_data_obj']), 'cart_total_amount': cart_total_amount})
+    context = render_to_string("core/async/cart-list.html",
+                               {"cart_data": request.session['cart_data_obj'],
+                                'totalcartitems': len(request.session['cart_data_obj']),
+                                'cart_total_amount': cart_total_amount})
     return JsonResponse({"data": context, "totalcartitems": len(request.session['cart_data_obj'])})
 
 
@@ -375,9 +388,9 @@ def create_checkout_session(request, oid):
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
     checkout_session = stripe.checkout.Session.create(
-        customer_email = order.email,
+        customer_email=order.email,
         payment_method_types=['card'],
-        line_items = [
+        line_items=[
             {
                 'price_data': {
                     'currency': 'USD',
@@ -389,9 +402,11 @@ def create_checkout_session(request, oid):
                 'quantity': 1
             },
         ],
-        mode = 'payment',
-        success_url = request.build_absolute_uri(reverse("core:payment-completed", args=[order.oid])) + "?session_id={CHECKOUT_SESSION_ID}",
-        cancel_url = request.build_absolute_uri(reverse("core:payment-completed", args=[order.oid]))
+        mode='payment',
+        success_url=request.build_absolute_uri(reverse("core:payment-completed",
+                                                       args=[order.oid])) +
+                                                       "?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url=request.build_absolute_uri(reverse("core:payment-completed", args=[order.oid]))
     )
 
     order.paid_status = False
@@ -405,7 +420,7 @@ def create_checkout_session(request, oid):
 @login_required
 def payment_completed_view(request, oid):
     order = CartOrder.objects.get(oid=oid)
-    if order.paid_status == False:
+    if order.paid_status is False:
         order.paid_status = True
         order.save()
 
@@ -427,7 +442,7 @@ def customer_dashboard(request):
 
     profile = Profile.objects.get(user=request.user)
 
-    orders = CartOrder.objects.annotate(month=ExtractMonth("order_date")).values("month").annotate(count=Count("id")).values("month", "count")
+    orders = CartOrder.objects.annotate(month=ExtractMonth("order_date")).values("month").annotate(count=Count("id")).values("month", "count")  # noqa E501
     month = []
     total_orders = []
 
